@@ -28,4 +28,16 @@ RUN apt-get update && \
 RUN wget http://opengene.org/fastp/fastp && \
     chmod a+x ./fastp
 
+# Install MultiQC
+RUN pip install multiqc
+
+# Install STAR aligner
+RUN wget https://github.com/alexdobin/STAR/archive/2.7.11b.tar.gz && \
+    tar -xzf 2.7.11b.tar.gz && \
+    rm 2.7.11b.tar.gz
+RUN cp /bin/Linux_x86_64/STAR /bin/
+
+
+
+
 
