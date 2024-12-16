@@ -4,7 +4,6 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /bin
 
 # Set up Ubuntu requirements for software
 # Install FastQC
@@ -24,7 +23,7 @@ RUN apt-get update && \
         python3-dev \
         fastqc \ 
         git \
-        default-jre
+        openjdk-17-jdk
 
 # Install MultiQC
 RUN pip install multiqc
@@ -36,9 +35,12 @@ RUN mkdir -p ~/apps && \
     git clone https://github.com/lh3/bwa.git && \
     cd bwa && \
     make 
-RUN cp bwa /bin
+RUN cp ~/apps/bwa/bwa /bin
 
-# Install Picard tools
+# Install Picard tools, and add a shortcut to the environment
 RUN mkdir -p ~/apps/picard && \
     cd ~/apps/picard && \
     wget https://github.com/broadinstitute/picard/releases/download/3.3.0/picard.jar
+RUN echo PICARD=/root/apps/picard/picard.jar >> /etc/environment && \
+    source /etc/environment
+
