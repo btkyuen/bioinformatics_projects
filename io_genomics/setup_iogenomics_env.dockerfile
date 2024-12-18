@@ -43,4 +43,3 @@ RUN mkdir -p ~/apps/picard && \
     wget https://github.com/broadinstitute/picard/releases/download/3.3.0/picard.jar
 RUN echo PICARD=/root/apps/picard/picard.jar >> /etc/environment && \
     source /etc/environment
-
