@@ -5,6 +5,8 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN mkdir -p /home/apps
+
 # Set up Ubuntu requirements for software
 # Install FastQC
 RUN apt-get update && \
@@ -24,8 +26,10 @@ RUN apt-get update && \
         fastqc
 
 # Install FastP
-RUN wget http://opengene.org/fastp/fastp && \
-    chmod a+x ./fastp
+RUN cd /home/apps && \
+    wget http://opengene.org/fastp/fastp && \
+    chmod a+x ./fastp && \
+    mv fastp /bin
 
 # Install MultiQC
 RUN pip install multiqc
@@ -37,7 +41,7 @@ RUN mkdir -p /home/apps/STAR/index && \
     wget https://github.com/alexdobin/STAR/archive/2.7.11b.tar.gz && \
     tar -xzf 2.7.11b.tar.gz && \
     rm 2.7.11b.tar.gz
-RUN cp /home/apps/STAR-2.7.11b/bin/STAR /bin/ && \
+RUN cp /home/apps/STAR-2.7.11b/bin/Linux_x86_64/STAR /bin && \
     rm -r /home/apps/STAR-2.7.11b
 
 # Get human genome files and start building indices
@@ -66,9 +70,11 @@ RUN cd /home/apps/STAR/index && \
     gunzip Homo_sapiens.GRCh38.113.gtf.gz Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 # Running genome generation step with less RAM, change this depending on the system configuration
 RUN STAR --runMode genomeGenerate --runThreadN 8 --genomeDir /home/apps/STAR/index --genomeFastaFiles /home/apps/STAR/index/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
-    --sjdbGTFfile /home/apps/STAR/index/Homo_sapiens.GRCh38.113.gtf --sjdbOverhang 100 --genomeChrBinNbits 16 --limitGenomeGenerateRAM 14000000000 --genomeSAsparseD 2 
+    --sjdbGTFfile /home/apps/STAR/index/Homo_sapiens.GRCh38.113.gtf --sjdbOverhang 100 --limitGenomeGenerateRAM 14000000000 --genomeChrBinNbits 16 --genomeSAsparseD 2 
 
+# Cleanup genome generation files
+RUN rm /home/apps/STAR/index/Homo_sapiens.GRCh38.113.gtf /home/apps/STAR/index/Homo_sapiens.GRCh38.dna.primary_assembly.fa
 
-   
-
-
+# Set environment variables for STAR
+RUN echo "STAR_GENOME=/home/apps/STAR/index" >> /etc/environment && \
+    source /etc/environment
