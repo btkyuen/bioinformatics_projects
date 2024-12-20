@@ -23,7 +23,9 @@ RUN apt-get update && \
         python3-pip \
         python3-setuptools \
         python3-dev \
-        fastqc
+        fastqc \
+        samtools && \
+    apt-get clean
 
 # Install FastP
 RUN cd /home/apps && \
@@ -78,3 +80,20 @@ RUN rm /home/apps/STAR/index/Homo_sapiens.GRCh38.113.gtf /home/apps/STAR/index/H
 # Set environment variables for STAR
 RUN echo "STAR_GENOME=/home/apps/STAR/index" >> /etc/environment && \
     source /etc/environment
+
+# Install deeptools
+RUN pip3 install deeptools
+
+# Install miniconda, then install salmon
+RUN cd /home/apps && \
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /home/apps/miniconda && \
+    rm Miniconda3-latest-Linux-x86_64.sh
+ENV PATH="/home/apps/miniconda/bin":$PATH
+RUN conda config --add channels defaults && \
+    conda config --add channels bioconda && \
+    conda config --add channels conda-forge && \
+    conda install -y -c bioconda salmon
+
+# Setup complete
+RUN echo "Bulk RNAseq environment setup complete."
