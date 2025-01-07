@@ -1,3 +1,3 @@
-General repository for ongoing projects. 
+General repository for ongoing bioinformatics projects. 
 
-Each project should have its own folder underneath the "projects" repo.
+Each project should have its own folder underneath the "bioinformatics_projects" repo.
