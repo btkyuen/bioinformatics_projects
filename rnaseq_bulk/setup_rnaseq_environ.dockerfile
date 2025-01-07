@@ -83,7 +83,7 @@ RUN STAR --runMode genomeGenerate \
         --genomeSAsparseD 2 
 
 # Set environment variables for STAR
-RUN echo "STAR_GENOME=/home/apps/STAR/index" >> /etc/environment && \
+RUN echo 'STAR_GENOME=/home/apps/STAR/index' >> /etc/environment && \
     source /etc/environment
 
 # Install deeptools
@@ -114,10 +114,11 @@ RUN cd /home/apps && \
 RUN mkdir -p /home/apps/salmon/index && \
     gffread -w /home/apps/salmon/index/Homo_sapiens.GRCh38.dna.primary_assembly.transcripts.fa \
             -g /home/apps/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
-            /home/apps/Homo_sapiens.GRCh38.113.gtf
+            /home/apps/Homo_sapiens.GRCh38.113.gtf && \
+    mv /home/apps/Homo_sapiens.GRCh38.dna.primary_assembly.fa.fai /home/apps/salmon/index/
 
 # Set environment variables for Salmon
-RUN echo "SALMON_GENOME=/home/apps/salmon/index/Homo_sapiens.GRCh38.dna.primary_assembly.transcripts.fa" >> /etc/environment && \
+RUN echo 'SALMON_GENOME=/home/apps/salmon/index/Homo_sapiens.GRCh38.dna.primary_assembly.transcripts.fa' >> /etc/environment && \
     source /etc/environment
 
 # Cleanup genome generation files
