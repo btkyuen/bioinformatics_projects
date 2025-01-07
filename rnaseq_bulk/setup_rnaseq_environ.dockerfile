@@ -66,16 +66,21 @@ RUN cp /home/apps/STAR-2.7.11b/bin/Linux_x86_64/STAR /bin && \
 #       (WSL) Don't forget to cleanup data (if desired) from /var/lib/docker/
 # Now when you restart Docker, it should be running out of the USB SSD and have your images/containers ready
 
-RUN cd /home/apps/STAR/index && \
+RUN cd /home/apps && \
     wget https://ftp.ensembl.org/pub/release-113/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz && \
     wget https://ftp.ensembl.org/pub/release-113/gtf/homo_sapiens/Homo_sapiens.GRCh38.113.gtf.gz && \
     gunzip Homo_sapiens.GRCh38.113.gtf.gz Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-# Running genome generation step with less RAM, change this depending on the system configuration
-RUN STAR --runMode genomeGenerate --runThreadN 8 --genomeDir /home/apps/STAR/index --genomeFastaFiles /home/apps/STAR/index/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
-    --sjdbGTFfile /home/apps/STAR/index/Homo_sapiens.GRCh38.113.gtf --sjdbOverhang 100 --limitGenomeGenerateRAM 14000000000 --genomeChrBinNbits 16 --genomeSAsparseD 2 
 
-# Cleanup genome generation files
-RUN rm /home/apps/STAR/index/Homo_sapiens.GRCh38.113.gtf /home/apps/STAR/index/Homo_sapiens.GRCh38.dna.primary_assembly.fa
+# Running genome generation step with less RAM, change this depending on the system configuration
+RUN STAR --runMode genomeGenerate \
+        --runThreadN 8 \
+        --genomeDir /home/apps/STAR/index \
+        --genomeFastaFiles /home/apps/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+        --sjdbGTFfile /home/apps/Homo_sapiens.GRCh38.113.gtf \
+        --sjdbOverhang 100 \
+        --limitGenomeGenerateRAM 14000000000 \
+        --genomeChrBinNbits 16 \
+        --genomeSAsparseD 2 
 
 # Set environment variables for STAR
 RUN echo "STAR_GENOME=/home/apps/STAR/index" >> /etc/environment && \
@@ -94,6 +99,29 @@ RUN conda config --add channels defaults && \
     conda config --add channels bioconda && \
     conda config --add channels conda-forge && \
     conda install -y -c bioconda salmon
+RUN echo 'export PATH="/home/apps/miniconda/bin":$PATH' >> ~/.bashrc && \
+    source ~/.bashrc
+
+# Install GFF utilities for processing genome index for Salmon
+RUN cd /home/apps && \
+    wget http://ccb.jhu.edu/software/stringtie/dl/gffread-0.12.7.Linux_x86_64.tar.gz && \
+    tar -xvf gffread-0.12.7.Linux_x86_64.tar.gz && \
+    mv gffread-0.12.7.Linux_x86_64/gffread /bin && \
+    rm -r gffread-0.12.7 && \
+    rm gffread-0.12.7.tar.gz
+
+# Generate Salmon index
+RUN mkdir -p /home/apps/salmon/index && \
+    gffread -w /home/apps/salmon/index/Homo_sapiens.GRCh38.dna.primary_assembly.transcripts.fa \
+            -g /home/apps/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+            /home/apps/Homo_sapiens.GRCh38.113.gtf
+
+# Set environment variables for Salmon
+RUN echo "SALMON_GENOME=/home/apps/salmon/index/Homo_sapiens.GRCh38.dna.primary_assembly.transcripts.fa" >> /etc/environment && \
+    source /etc/environment
+
+# Cleanup genome generation files
+RUN rm /home/apps/Homo_sapiens.GRCh38.113.gtf /home/apps/Homo_sapiens.GRCh38.dna.primary_assembly.fa
 
 # Setup complete
 RUN echo "Bulk RNAseq environment setup complete."
