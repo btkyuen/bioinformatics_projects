@@ -65,6 +65,7 @@ RUN cp /home/apps/STAR-2.7.11b/bin/Linux_x86_64/STAR /bin && \
 #RUN echo 'STAR_GENOME=/home/apps/STAR/index' >> /etc/environment && \
 #    source /etc/environment
 
+
 # Install deeptools
 RUN pip3 install deeptools
 
