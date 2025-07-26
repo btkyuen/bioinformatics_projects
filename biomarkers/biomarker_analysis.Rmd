@@ -92,7 +92,7 @@ signature_list_2 <- list("Th1 cells" = th1_cell,
 
 # Load the NanoString CancerImmune probes
 # The first line of the .csv is a descriptor and can be skipped 
-ns_probe_annotations <- read.csv("/home/byuen/references/nanostring/ProbeAnnotations_NS_CancerImmune_V1.1.csv", skip = 1)
+ns_probe_annotations <- read.csv("/home/references/nanostring/ProbeAnnotations_NS_CancerImmune_V1.1.csv", skip = 1)
 
 ns_probe_list <- strsplit(ns_probe_annotations$Related.Probes, ";") %>% unlist() %>% unique()
 ```
@@ -778,12 +778,12 @@ make_gene_custom_dotplot <- function(plot_data, probeset, probeset_labels, file_
 #Load Data
 ```{r load_data, include = TRUE, echo = FALSE}
 
-working_dir <- "/home/byuen/projects/actymthera/projects/ns_cohort_1-3/results/"
-raw_data_dir <- "/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/"
+working_dir <- "/home/projects/ns_cohort_1-3/results/"
+raw_data_dir <- "/home/projects/ns_cohort_1-3/raw_data/"
 
 # Load patient NanoString data
-log2norm_data <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/log2norm_data.csv")
-raw_data <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/raw_data.csv")
+log2norm_data <- read.csv("/home/projects/ns_cohort_1-3/raw_data/log2norm_data.csv")
+raw_data <- read.csv("/home/projects/ns_cohort_1-3/raw_data/raw_data.csv")
 
 # Reshape the data so that genes are in columns and samples are in rows
 log2norm_data <- log2norm_data[-c(1,2),] # Remove first two rows, no useful data
@@ -798,7 +798,7 @@ log2norm_data <- as.data.frame(log2norm_data, keep.rownames = TRUE)
 log2norm_data$sample_name <- rownames(log2norm_data)
 
 # Load patient identifiers and remove empty columns
-patient_ids <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/patient_ids_cohorts_1-3.csv")
+patient_ids <- read.csv("/home/projects/ns_cohort_1-3/raw_data/patient_ids_cohorts_1-3.csv")
 patient_ids$sample_name <- gsub(" ", ".", patient_ids$sample_name)
 patient_ids$sample_name <- gsub("-", ".", patient_ids$sample_name)
 
@@ -1801,7 +1801,7 @@ for(probeset in ns_probe_list){
 # Cell Profiler Module in NanoString.
 
 # Some reformatting of the file to fit in with existing workflow
-raw_cellprofiler_input <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/celltype_score_raw.csv", 
+raw_cellprofiler_input <- read.csv("/home/projects/ns_cohort_1-3/raw_data/celltype_score_raw.csv", 
                                    skip = 1)
 colnames(raw_cellprofiler_input)[colnames(raw_cellprofiler_input) == "X"] <- "sample_name"
 raw_cellprofiler_input$sample_name <- gsub("-", ".", raw_cellprofiler_input$sample_name)
@@ -1812,7 +1812,7 @@ raw_cellprofiler_input$px <- sub("_.*", "", raw_cellprofiler_input$id)
 colnames(raw_cellprofiler_input)[colnames(raw_cellprofiler_input) == "visit_id"] <- "tp"
 raw_cellprofiler_input$sample_name <- NULL
 
-relative_cellprofiler_input <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/celltype_score_relative.csv",
+relative_cellprofiler_input <- read.csv("/home/projects/ns_cohort_1-3/raw_data/celltype_score_relative.csv",
                                    skip = 1)
 colnames(relative_cellprofiler_input)[colnames(relative_cellprofiler_input) == "X"] <- "sample_name"
 relative_cellprofiler_input$sample_name <- gsub("-", ".", relative_cellprofiler_input$sample_name)
@@ -1850,7 +1850,7 @@ for(celltype in celltypes){
 ```{r gen_cellprofiler_plots_custom, include = TRUE, echo = FALSE, fig.width = 10, fig.height = 5}
 
 # Grab only data from cohort 3
-raw_cellprofiler_input <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/celltype_score_raw.csv", 
+raw_cellprofiler_input <- read.csv("/home/projects/ns_cohort_1-3/raw_data/celltype_score_raw.csv", 
                                    skip = 1)
 colnames(raw_cellprofiler_input)[colnames(raw_cellprofiler_input) == "X"] <- "sample_name"
 raw_cellprofiler_input$sample_name <- gsub("-", ".", raw_cellprofiler_input$sample_name)
@@ -1861,7 +1861,7 @@ raw_cellprofiler_input$px <- sub("_.*", "", raw_cellprofiler_input$id)
 colnames(raw_cellprofiler_input)[colnames(raw_cellprofiler_input) == "visit_id"] <- "tp"
 raw_cellprofiler_input$sample_name <- NULL
 
-relative_cellprofiler_input <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/celltype_score_relative.csv",
+relative_cellprofiler_input <- read.csv("/home/projects/ns_cohort_1-3/raw_data/celltype_score_relative.csv",
                                    skip = 1)
 colnames(relative_cellprofiler_input)[colnames(relative_cellprofiler_input) == "X"] <- "sample_name"
 relative_cellprofiler_input$sample_name <- gsub("-", ".", relative_cellprofiler_input$sample_name)
@@ -2000,7 +2000,7 @@ for(celltype in celltypes){
 ```{r gen_cellprofiler_plots_custom, include = TRUE, echo = FALSE, fig.width = 10, fig.height = 5}
 
 # Grab only data from cohort 3
-raw_cellprofiler_input <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/celltype_score_raw.csv", 
+raw_cellprofiler_input <- read.csv("/home/projects/ns_cohort_1-3/raw_data/celltype_score_raw.csv", 
                                    skip = 1)
 colnames(raw_cellprofiler_input)[colnames(raw_cellprofiler_input) == "X"] <- "sample_name"
 raw_cellprofiler_input$sample_name <- gsub("-", ".", raw_cellprofiler_input$sample_name)
@@ -2011,7 +2011,7 @@ raw_cellprofiler_input$px <- sub("_.*", "", raw_cellprofiler_input$id)
 colnames(raw_cellprofiler_input)[colnames(raw_cellprofiler_input) == "visit_id"] <- "tp"
 raw_cellprofiler_input$sample_name <- NULL
 
-relative_cellprofiler_input <- read.csv("/home/byuen/projects/actymthera/projects/ns_cohort_1-3/raw_data/celltype_score_relative.csv",
+relative_cellprofiler_input <- read.csv("/home/projects/ns_cohort_1-3/raw_data/celltype_score_relative.csv",
                                    skip = 1)
 colnames(relative_cellprofiler_input)[colnames(relative_cellprofiler_input) == "X"] <- "sample_name"
 relative_cellprofiler_input$sample_name <- gsub("-", ".", relative_cellprofiler_input$sample_name)
