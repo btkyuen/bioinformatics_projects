@@ -17,8 +17,9 @@ podman run -d \
   --name "${CONTAINER_NAME}" \
   --privileged \
   -v "$PWD":/workspace \
-  -v claude-dev:/home/claude-dev/.claude \
-  -e CLAUDE_CONFIG_DIR="/home/claude-dev/.claude" \
+  -v claude-dev:/root/.claude \
+  -e CLAUDE_CONFIG_DIR="/root/.claude" \
+  -e CONTAINERS_STORAGE_DRIVER="vfs" \
   claude-dev:latest
 
 # Instantly drop you into the bash shell

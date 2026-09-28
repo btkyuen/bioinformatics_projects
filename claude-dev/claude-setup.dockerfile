@@ -17,11 +17,7 @@ RUN curl -fsSL https://get.nextflow.io | bash && \
 # Install Claude Code
 RUN npm install -g @anthropic-ai/claude-code
 
-# Add unpriveleged user
-RUN useradd -m -s /bin/bash claude-dev
-
-# Set working directory
-USER claude-dev
+# Set default directory (defaulting to root)
 WORKDIR /workspace
 
 # Keep container running indefinitely
