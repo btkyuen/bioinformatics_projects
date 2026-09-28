@@ -16,11 +16,10 @@ echo "Starting Claude Code environment in $PWD..."
 podman run -d \
   --name "${CONTAINER_NAME}" \
   --privileged \
-  --userns=keep-id \
-  -v "$PWD":/workspace:Z \
+  -v "$PWD":/workspace \
   -v claude-dev:/home/claude-dev/.claude \
   -e CLAUDE_CONFIG_DIR="/home/claude-dev/.claude" \
-  claude-env:latest >/dev/null
+  claude-dev:latest
 
 # Instantly drop you into the bash shell
 podman exec -it "${CONTAINER_NAME}" bash

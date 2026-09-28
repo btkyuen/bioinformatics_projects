@@ -15,7 +15,7 @@ RUN curl -fsSL https://get.nextflow.io | bash && \
     mv nextflow /usr/local/bin/
 
 # Install Claude Code
-RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN npm install -g @anthropic-ai/claude-code
 
 # Add unpriveleged user
 RUN useradd -m -s /bin/bash claude-dev
@@ -26,3 +26,6 @@ WORKDIR /workspace
 
 # Keep container running indefinitely
 CMD ["tail", "-f", "/dev/null"]
+
+# Build this Podman image using:
+# podman build -t claude-dev:latest -f claude-setup.dockerfile .
