@@ -1,0 +1,60 @@
+# To be loaded outside of container
+# Once saved, run the following command:
+# git config --global core.excludesfile ~/.gitignore_global
+# Then, verify:
+# git config --global core.excludesfile
+
+# ==========================================
+# SECRETS & CREDENTIALS
+# ==========================================
+.env
+.env.*
+*.env
+secrets.*
+credentials.*
+*.pem
+*.key
+*.p12
+*.cer
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*.bak
+*.orig
+
+# ==========================================
+# OPERATING SYSTEM & EDITOR CLUTTER
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================================
+# LOGS & TEMPORARY FILES
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.history/
+
+# ==========================================
+# BIOINFORMATICS & NEXTFLOW ARTIFACTS
+# ==========================================
+work/
+.nextflow*
+trace-*.txt
+timeline-*.html
+dag-*.html
+.fusion/
+EOF
